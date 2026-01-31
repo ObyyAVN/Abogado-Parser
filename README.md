@@ -19,7 +19,7 @@ Tool ini digunakan untuk ekstrak dan modifikasi file script (.SCF) dari game vis
 |------|--------|
 | `parser_scf.py` | Parser utama untuk file SCF |
 | `scf_parser_v2.py` | Versi 2 dari parser dengan fitur tambahan |
-| `injector_scf.py` | Inject text kembali ke file SCF |
+| `injector_scf.py` | Inject .SCF to .SCF untuk tampilan menu |
 | `sdk_tools.py` | Tools SDK untuk manipulasi file game |
 | `sdk_verify.py` | Verifikasi integritas file |
 | `workflow.py` | Otomasi workflow parsing dan injecting |
