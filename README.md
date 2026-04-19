@@ -1,77 +1,101 @@
-# Abogado Parser
+# Abogado Arch SDK
 
-Parser untuk file script visual novel **Shuumatsu no Sugoshikata ~The World is Drawing to an W/end.~**
+Parser dan toolkit untuk file script visual novel **Shuumatsu no Sugoshikata ～The World is Drawing to an W/end.～**
 
-## Deskripsi
+---
 
-Tool ini digunakan untuk ekstrak dan modifikasi file script (.SCF) dari game visual novel. Berguna untuk keperluan translation, modding, atau analisis konten game.
+## Apa Ini?
 
-## Fitur
+Abogado Arch SDK adalah kumpulan tool berbasis Python yang dirancang untuk membaca, mengekstrak, dan memodifikasi file script (`.SCF`) dari game visual novel *Shuumatsu no Sugoshikata*. Tool ini cocok digunakan untuk keperluan translation, modding, maupun sekadar menganalisis isi konten game.
 
-- **Parser SCF**: Ekstrak teks dari file .SCF ke format yang mudah dibaca
-- **Injector SCF**: Masukkan kembali teks yang sudah dimodifikasi ke file .SCF
-- **SDK Tools**: Utilitas tambahan untuk verifikasi dan testing
-- **Format Output**: Support untuk JSON dan TXT
+File `.SCF` dalam game ini menggunakan encoding **Shift-JIS** dan menyimpan teks dialog, instruksi sistem, serta data menu dalam format biner. SDK ini hadir untuk menjembatani gap antara format biner tersebut dengan teks yang bisa dibaca dan diedit manusia.
 
-## File Utama
+---
 
-| File | Fungsi |
-|------|--------|
-| `parser_scf.py` | Parser utama untuk file SCF |
-| `scf_parser_v2.py` | Versi 2 dari parser dengan fitur tambahan |
-| `injector_scf.py` | Inject .SCF to .SCF untuk tampilan menu |
-| `sdk_tools.py` | Tools SDK untuk manipulasi file game |
-| `sdk_verify.py` | Verifikasi integritas file |
-| `workflow.py` | Otomasi workflow parsing dan injecting |
-| `rapihkan.py` | Utilitas untuk clean up output |
+## Struktur File
+
+Repo ini terdiri dari beberapa file Python dengan peran yang berbeda-beda.
+
+| File | Peran |
+|---|---|
+| `parser_scf.py` | Parser utama — membaca file `.SCF` dan mengekstrak teksnya |
+| `scf_parser_v2.py` | Versi kedua parser dengan penanganan yang lebih baik |
+| `injector_scf.py` | Memasukkan kembali teks yang sudah diedit ke dalam file `.SCF` |
+| `sdk_tools.py` | Kumpulan utilitas untuk manipulasi file game |
+| `sdk_verify.py` | Verifikasi integritas file setelah proses inject |
+| `workflow.py` | Mengotomasi seluruh alur kerja dari parse hingga inject |
+| `rapihkan.py` | Membersihkan dan merapikan hasil output |
+
+---
 
 ## Cara Pakai
 
-### 1. Parse File SCF
+Alur kerja utamanya terdiri dari tiga tahap: **parse → edit → inject**.
+
+### Tahap 1 — Parse File SCF
+
+Jalankan parser untuk mengekstrak isi teks dari file `.SCF`:
 
 ```bash
 python parser_scf.py SCN001.SCF
 ```
 
-Output akan berupa file JSON atau TXT yang berisi dialog dan script dari game.
+Hasilnya berupa file `.json` atau `.txt` yang berisi dialog dan teks script dari scene tersebut, dalam format yang mudah dibaca.
 
-### 2. Edit Text
+### Tahap 2 — Edit Teks
 
-Edit file output (`.json` atau `.txt`) sesuai kebutuhan.
+Buka file hasil parse (`.json` atau `.txt`) menggunakan text editor apa saja. Lakukan perubahan teks sesuai kebutuhan, misalnya menerjemahkan dialog atau mengganti nama karakter.
 
-### 3. Inject Kembali
+### Tahap 3 — Inject Kembali
+
+Setelah selesai mengedit, masukkan kembali teks tersebut ke dalam file `.SCF` asli:
 
 ```bash
 python injector_scf.py SCN001.json SCN001.SCF
 ```
 
-File SCF akan ter-update dengan text baru.
+File `.SCF` akan diperbarui dengan teks yang baru. Setelah inject, disarankan menjalankan `sdk_verify.py` untuk memastikan integritas file tidak rusak.
 
-## Requirements
+### Otomasi dengan Workflow
 
-- Python 3.x
-- Dependencies standar (jika ada, install dengan `pip install -r requirements.txt`)
+Jika ingin memproses banyak file sekaligus, gunakan `workflow.py` yang mengotomasi seluruh proses dari awal hingga akhir tanpa perlu menjalankan tiap script secara manual.
+
+---
 
 ## Struktur File Game
 
-- `SCN***.SCF` - File script scene
-- `SCNDAT.TBL` - Table data scene
-- `scene.DSK` / `scene.PFT` - File asset game
+Untuk referensi, berikut format file yang dikenali oleh SDK ini.
 
-## Catatan
+| File Game | Keterangan |
+|---|---|
+| `SCN***.SCF` | File script per scene (misal `SCN001.SCF`, `SCN002.SCF`) |
+| `SCNDAT.TBL` | Tabel data yang memetakan scene ke file script |
+| `scene.DSK` / `scene.PFT` | File aset game pendukung |
 
-- Backup file original sebelum melakukan modifikasi
-- Verifikasi hasil inject dengan `sdk_verify.py`
-- File `SCN002.SCF_FIXED` adalah contoh file yang sudah diperbaiki
+---
+
+## Requirements
+
+Tool ini membutuhkan **Python 3.x**. Tidak ada dependency eksternal yang wajib, tapi jika ke depannya diperlukan, cukup jalankan:
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+## Sebelum Mulai
+
+Selalu **backup file `.SCF` original** sebelum melakukan proses inject. File yang sudah dimodifikasi tidak bisa dikembalikan secara otomatis, jadi satu salinan backup bisa menyelamatkan banyak pekerjaan.
+
+---
 
 ## Disclaimer
 
-Tool ini dibuat untuk keperluan edukasi dan research. Pastikan mengikuti aturan copyright dan ToS dari game original.
+SDK ini dibuat semata-mata untuk keperluan edukasi dan penelitian. Pengguna bertanggung jawab penuh untuk memastikan penggunaan tool ini sesuai dengan aturan copyright dan Terms of Service dari game original.
+
+---
 
 ## Kontribusi
 
-Pull request dan issue welcome. Untuk perubahan major, buka issue dulu untuk diskusi.
-
-## License
-
-Lihat file LICENSE (jika ada) untuk detail.
+Pull request dan issue sangat welcome. Untuk perubahan besar, sebaiknya buka issue terlebih dahulu agar bisa didiskusikan sebelum implementasi.
